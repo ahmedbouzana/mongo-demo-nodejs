@@ -28,10 +28,24 @@ async function createCourse() {
 }
 
 async function getCourses() {
+  
   //const courses = await Course.find(); //get all courses
-  const courses = await Course.find({ author: "Ahmed", isPublished: true })
+
+  const pageNumber = 2;
+  const pageSize = 10;
+
+  const courses = await Course
+    //.find({ author: "Ahmed", isPublished: true })
+    //.find({price: {$gte: 10, $lte: 20 } } ) //price great than or equal 10 and less than or equal 20
+    //.find({price: {$in:[10, 15, 20] } } )  // price == 10 or 15 or 20 
+    .find()
+    .or([{author : "Ahmed"}, {author : "Yacine"}]) // or logique
+    .and([{isPublished: true}]) // and logique
+    /* .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize) */ // pagination ex api/courses?pageNumber=2&pageSize=10
     .limit(10)
     .sort({ name: 1 }) //1 for asc, -1 for desc
+    //.count()
     .select({ name: 1, tags: 1 });
   console.log(courses);
 }
